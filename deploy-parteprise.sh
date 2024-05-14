@@ -12,8 +12,14 @@ sudo apt-get install -y jq curl
 
 DEPLOY_ID=$(uuidgen)
 
+if [ -n "$DEPLOY_BRANCH" ]; then
+  REQUEST_DATA="{\"id\":\"$DEPLOY_ID\",\"app\":\"$DEPLOY_APP\",\"host\":\"$DEPLOY_HOST\",\"branch\":\"$DEPLOY_BRANCH\"}"
+else
+  REQUEST_DATA="{\"id\":\"$DEPLOY_ID\",\"app\":\"$DEPLOY_APP\",\"host\":\"$DEPLOY_HOST\"}"
+fi
+
 set -ex
-curl -sSL --fail -K - -w '>>> HTTP %{response_code}\n' -X POST -H "Content-Type: application/json" -d "{\"id\":\"$DEPLOY_ID\",\"app\":\"$DEPLOY_APP\",\"host\":\"$DEPLOY_HOST\"}" "${DEPLOY_HTTPS_REQUEST_URL}/${DEPLOY_ID}" <<<"-u \"${DEPLOY_HTTPS_LOGIN}:${DEPLOY_HTTPS_PASSWORD}\""
+curl -sSL --fail -K - -w '>>> HTTP %{response_code}\n' -X POST -H "Content-Type: application/json" -d "$REQUEST_DATA" "${DEPLOY_HTTPS_REQUEST_URL}/${DEPLOY_ID}" <<<"-u \"${DEPLOY_HTTPS_LOGIN}:${DEPLOY_HTTPS_PASSWORD}\""
 set +ex
 
 for I in $(seq 1 300); do
