@@ -22,7 +22,7 @@ set -ex
 curl -sSL --fail -K - -w '>>> HTTP %{response_code}\n' -X POST -H "Content-Type: application/json" -d "$REQUEST_DATA" "${DEPLOY_HTTPS_REQUEST_URL}/${DEPLOY_ID}" <<<"-u \"${DEPLOY_HTTPS_LOGIN}:${DEPLOY_HTTPS_PASSWORD}\""
 set +ex
 
-for I in $(seq 1 300); do
+for I in $(seq 1 480); do
   set -e
   DEPLOY_STATUS=$(curl --fail -sSL -K - "${DEPLOY_HTTPS_RESPONSE_URL}/${DEPLOY_ID}" <<<"-u \"${DEPLOY_HTTPS_LOGIN}:${DEPLOY_HTTPS_PASSWORD}\"")
   set +e
